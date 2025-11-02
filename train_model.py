@@ -18,15 +18,10 @@ from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardSc
 
 
 def column_ratio(X):
-    """
-    Helper function to calculate a ratio between the first two columns of an array.
-    We'll use this to create features like 'rooms_per_house'.
-    """
-    
+   
     return X[:, [0]] / (X[:, [1]] + 1e-6)
 
 def ratio_name(function_transformer, feature_names_in):
-    """Helper function to name the new ratio feature."""
     return ["ratio"]
 
 
@@ -65,9 +60,6 @@ if __name__ == "__main__":
         print("Error: housing.csv not found.")
         print("Please check the file path in train_model.py")
         exit()
-    except Exception as e:
-        print(f"An error occurred loading the file: {e}")
-        exit()
 
     housing_full["income_cat"] = pd.cut(housing_full["median_income"],
                                         bins=[0., 1.5, 3.0, 4.5, 6., np.inf],
@@ -80,7 +72,7 @@ if __name__ == "__main__":
     for set_ in (strat_train_set, strat_test_set):
         set_.drop("income_cat", axis=1, inplace=True)
     
-    print("Data split into training and test sets.")
+    print("stratification compeleted successfully !!!.")
 
     housing = strat_train_set.drop("median_house_value", axis=1)
     housing_labels = strat_train_set["median_house_value"].copy()
@@ -88,7 +80,7 @@ if __name__ == "__main__":
     X_test = strat_test_set.drop("median_house_value", axis=1)
     y_test = strat_test_set["median_house_value"].copy()
 
-    print("Fitting KMeans for geographic features...")
+
     n_clusters = 10
     kmeans = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
     kmeans.fit(housing[["latitude", "longitude"]])
@@ -122,7 +114,7 @@ if __name__ == "__main__":
         ("random_forest", RandomForestRegressor(random_state=42)), 
     ])
 
-    print("Starting model tuning (this may take a minute)...")
+    print("model tune ho rahe hain")
     
     gamma_values = [0.1, 0.5, 1.0, 5.0, 10.0]
     geo_kw_args_list = [
@@ -158,7 +150,7 @@ if __name__ == "__main__":
     })
     comparison_df["Difference"] = comparison_df["Actual Price"] - comparison_df["Predicted Price"]
     print("\n-------------------------------------------------")
-    print("Comparison of first 100 test predictions vs. actual prices:")
+    print("Comparison of first 100 test predictions and. actual prices:")
     print(comparison_df.to_string())
     print("-------------------------------------------------")
     
